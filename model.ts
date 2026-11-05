@@ -1,7 +1,9 @@
-// 1. TaskStatus Literal Union
+// model.ts
+
+// 1. TaskStatus literal union
 export type TaskStatus = "todo" | "in-progress" | "done";
 
-// 2. Task Interface
+// 2. Task interface
 export interface Task {
   id: number;
   title: string;
@@ -10,41 +12,26 @@ export interface Task {
 
 let nextId = 1;
 
-// 3. addTask Operation
+// 3. Required typed operations
 export function addTask(tasks: Task[], title: string): Task[] {
-  const newTask: Task = {
-    id: nextId++,
-    title,
-    status: "todo",
-  };
+  const newTask: Task = { id: nextId++, title, status: "todo" };
   return [...tasks, newTask];
 }
 
-// 4. completeTask Operation
 export function completeTask(tasks: Task[], id: number): Task[] {
-  return tasks.map((task) =>
-    task.id === id ? { ...task, status: "done" } : task
-  );
+  return tasks.map((t) => (t.id === id ? { ...t, status: "done" } : t));
 }
 
-// 5. filterByStatus Operation
 export function filterByStatus(tasks: Task[], status: TaskStatus): Task[] {
-  return tasks.filter((task) => task.status === status);
+  return tasks.filter((t) => t.status === status);
 }
 
-// --- Extra Operations (Required for Originality) ---
-
-// Delete a task by ID
-export function deleteTask(tasks: Task[], id: number): Task[] {
-  return tasks.filter((task) => task.id !== id);
-}
-
-// Advance a task: todo -> in-progress -> done
+// 4. Extra operation (e.g., advanceTask or deleteTask)
 export function advanceTask(tasks: Task[], id: number): Task[] {
-  return tasks.map((task) => {
-    if (task.id !== id) return task;
-    if (task.status === "todo") return { ...task, status: "in-progress" };
-    if (task.status === "in-progress") return { ...task, status: "done" };
-    return task;
+  return tasks.map((t) => {
+    if (t.id !== id) return t;
+    if (t.status === "todo") return { ...t, status: "in-progress" };
+    if (t.status === "in-progress") return { ...t, status: "done" };
+    return t;
   });
 }
